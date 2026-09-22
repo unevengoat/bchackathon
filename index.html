@@ -110,6 +110,30 @@ nav{
 .sticky-x{position:sticky; top:82px; z-index:5; background:rgba(248,250,252,.9); backdrop-filter:blur(8px); padding:10px 0; margin:0 -32px; padding-left:32px; padding-right:32px; border-bottom:1px solid var(--border); display:none}
 @media(max-width:900px){.sticky-x{display:flex; gap:8px; overflow:auto}}
 .chip{white-space:nowrap; padding:8px 14px; border-radius:999px; background:#fff; border:1px solid var(--border); font-weight:700; font-size:12px}
+#topProgress{position:fixed; top:0; left:0; height:3px; width:0; background:linear-gradient(90deg,var(--emerald),var(--gold)); z-index:99; transition:width .08s linear}
+#rail{position:fixed; left:16px; top:50%; transform:translateY(-50%); z-index:40; display:flex; flex-direction:column; align-items:center; gap:0; pointer-events:auto}
+.rail-line{width:2px; height:0; background:var(--border); position:absolute; left:50%; top:12px; bottom:12px; transform:translateX(-50%); z-index:0}
+.rail-fill{position:absolute; left:50%; top:12px; width:2px; background:var(--emerald); transform:translateX(-50%); z-index:1; transition:height .3s ease; height:0}
+.rail-dot{width:36px; height:36px; border-radius:50%; background:#fff; border:2px solid var(--border); display:grid; place-items:center; font-size:11px; font-weight:800; color:var(--muted); cursor:pointer; position:relative; z-index:2; transition:all .25s ease; box-shadow:0 2px 8px rgba(15,23,42,.06)}
+.rail-dot.active{background:var(--ink); color:#fff; border-color:var(--ink); transform:scale(1.15); box-shadow:0 6px 18px rgba(15,23,42,.18)}
+.rail-dot:hover{border-color:var(--emerald); color:var(--emerald)}
+.rail-dot.active:hover{color:#fff}
+.rail-label{position:absolute; left:46px; top:50%; transform:translateY(-50%); background:var(--ink); color:#fff; padding:6px 10px; border-radius:8px; font-size:11px; font-weight:700; white-space:nowrap; opacity:0; pointer-events:none; transition:opacity .2s, transform .2s; transform:translateY(-50%) translateX(-6px)}
+.rail-dot:hover .rail-label{opacity:1; transform:translateY(-50%) translateX(0)}
+.act{position:relative; margin:0 -32px; padding:32px 32px 16px; border-top:1px solid transparent}
+.act-1{background:linear-gradient(180deg,#ffffff 0%, #f8fafc 100%)}
+.act-2{background:linear-gradient(180deg,#fffbeb 0%, #fef3c7 20%, #ffffff 100%); border-top-color:#fde68a}
+.act-3{background:linear-gradient(180deg,#ecfdf5 0%, #f0fdf4 30%, #ffffff 100%); border-top-color:#a7f3d0}
+.act-4{background:linear-gradient(180deg,#f1f5f9 0%, #e2e8f0 20%, #0f172a 100%); border-top-color:#0f172a; color:#0f172a}
+.act-4 .eyebrow{color:#0e9a5e}
+.act-4 .h2{color:#0f172a}
+.act-4 .lead{color:#475569}
+.act-header{position:sticky; top:62px; z-index:5; backdrop-filter:blur(12px); background:rgba(255,255,255,.78); border:1px solid var(--border); border-radius:999px; display:inline-flex; align-items:center; gap:10px; padding:8px 14px; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); margin-bottom:14px; box-shadow:0 4px 16px rgba(15,23,42,.08)}
+.act-header b{color:var(--ink)}
+.next-fab{position:fixed; right:18px; bottom:18px; z-index:45; background:var(--ink); color:#fff; border:none; padding:12px 18px; border-radius:999px; font-weight:800; font-size:13px; box-shadow:0 10px 30px rgba(15,23,42,.22); cursor:pointer; display:flex; align-items:center; gap:8px; opacity:0; transform:translateY(10px); pointer-events:none; transition:all .3s ease}
+.next-fab.show{opacity:1; transform:none; pointer-events:auto}
+@media(max-width:1100px){#rail{display:none} .act{margin:0 -16px; padding:24px 16px 12px}}
+@media(max-width:900px){.act-header{position:relative; top:0}}
 .card{transition:transform .25s ease, box-shadow .25s ease}
 .card:hover{transform:translateY(-2px); box-shadow:0 14px 40px rgba(15,23,42,.10)}
 .hero-card{animation:floatCard 6s ease-in-out infinite}
@@ -125,7 +149,7 @@ nav{
  <div class="logo">F</div>
  <div>
  <div style="font-weight:800; line-height:1">Fischer's Money Mechanics</div>
- <div style="font-size:11px; color:var(--muted); font-weight:700; letter-spacing:.06em; text-transform:uppercase">by Advaiya Bahl • - bchackathon.onrender.com</div>
+  <div style="font-size:11px; color:var(--muted); font-weight:700; letter-spacing:.06em; text-transform:uppercase">by Advaiya Bahl • bchackathon.onrender.com</div>
  </div>
  </div>
  <div class="nav-links" id="navLinks">
@@ -133,6 +157,21 @@ nav{
  </div>
  <button class="cta" onclick="document.getElementById('s1').scrollIntoView()">Start Story →</button>
 </nav>
+<div id="topProgress"></div>
+<aside id="rail" aria-label="Chapter navigation">
+  <div class="rail-line"></div>
+  <div class="rail-fill" id="railFill"></div>
+  <button class="rail-dot" data-target="s1">1<span class="rail-label">My Vision</span></button>
+  <button class="rail-dot" data-target="s2">2<span class="rail-label">Time Value</span></button>
+  <button class="rail-dot" data-target="s3">3<span class="rail-label">Cost Forecast</span></button>
+  <button class="rail-dot" data-target="s4">4<span class="rail-label">Allocation</span></button>
+  <button class="rail-dot" data-target="s5">5<span class="rail-label">Compounding</span></button>
+  <button class="rail-dot" data-target="s6">6<span class="rail-label">Inflation</span></button>
+  <button class="rail-dot" data-target="s7">7<span class="rail-label">Risk</span></button>
+  <button class="rail-dot" data-target="s8">8<span class="rail-label">10Y Plan</span></button>
+  <button class="rail-dot" data-target="s9">9<span class="rail-label">Summary</span></button>
+  <button class="rail-dot" data-target="s10">10<span class="rail-label">Reflection</span></button>
+</aside>
 
 <div class="sticky-x">
  <span class="chip">💼 Finance</span><span class="chip">📈 12% target</span><span class="chip">💰 $50k capital</span><span class="chip">🎓 $100k+ college</span>
@@ -143,7 +182,7 @@ nav{
  <div>
  <span class="kicker">✦ Fischer's Money Mechanics by Advaiya Bahl - Grades 7 to 9 - Wealth Architect</span>
  <h1 class="display">I am 15.<br><em>I have $50k.</em><br>This is my plan.</h1>
- <p class="sub">I am 15 and I have $50,000 to invest. I want to work in finance. I built this blueprint myself. I calculated every number, I made every chart interactive and I can explain every decision I made.</p>
+  <p class="sub">I am 15 and I have $50,000 to invest. I want to work in finance and I put this site together to track how my money can grow for college.</p>
  <div class="hero-stats">
  <div class="stat"><span>Starting Capital</span><b class="mono">$50,000</b></div>
  <div class="stat"><span>Target Return</span><b style="color:var(--emerald)">10-12%</b><span style="display:block">after tax</span></div>
@@ -173,11 +212,13 @@ nav{
 
 <div class="wrap">
 
+<div class="act act-1">
+<div class="act-header">Act 01 <b>Vision</b> • Where I start</div>
  <!-- S1 -->
  <section id="s1" class="section reveal">
  <div class="eyebrow">Slide 1, My Future Vision</div>
  <h2 class="h2">I want to work in finance and I am letting my money compound.</h2>
- <p class="lead">I chose Finance because I love turning research into real returns. College isn't just a cost, it's my first big investment. I'm estimating <b>$100,000+ for the full pathway</b> (tuition + living + books) and I'm starting early so compounding can carry most of the weight.</p>
+  <p class="lead">I chose finance because I like turning research into real returns. I see college as my first big investment. I am estimating <b>$100,000+ for the full pathway</b> (tuition plus living plus books) and I am starting early so compounding can do most of the work.</p>
  <div class="grid3" style="margin-top:18px">
  <div class="card">
  <div class="pill">💼 Career Aspiration</div>
@@ -197,12 +238,15 @@ nav{
  <div class="kpi" style="margin-top:10px"><b style="color:#facc15; font-size:36px" id="costHero">$130k</b><span style="opacity:.8">total 4-yr</span></div>
  <p style="opacity:.85; font-size:13px">Live estimate from §3 forecast. Goal: let my $50k grow to cover it <b>and</b> keep wealth building after graduation.</p>
  <button class="btn" style="background:#fff; color:#0f172a; margin-top:12px" onclick="document.getElementById('s3').scrollIntoView()">See how I calculated →</button>
- </div>
- </div>
- </section>
+  </div>
+  </div>
+  </section>
+</div>
 
- <!-- S2 TVM -->
- <section id="s2" class="section reveal">
+<div class="act act-2">
+<div class="act-header">Act 02 <b>Time and Cost</b> • What money and college really cost</div>
+  <!-- S2 TVM -->
+  <section id="s2" class="section reveal">
  <div class="eyebrow">Slide 2, Time Value of Money Analysis</div>
  <h2 class="h2">$50,000 today <span style="color:var(--muted); font-weight:500">or</span> $65,000 in 3 years?</h2>
  <p class="lead">I know money today is worth more because I can invest it and let it grow. I ran the math at my real expected return, <b>10% after-tax</b> (and my target 12%). <span style="background:#fef3c7; padding:2px 6px; border-radius:6px; font-weight:700">Answer: Take $50k TODAY.</span></p>
@@ -279,13 +323,16 @@ nav{
  <b>📈 Cost Inflation Curve</b>
  <canvas id="eduChart" height="240"></canvas>
  <p style="font-size:13px; color:var(--muted); margin-top:10px"><b>My take:</b> Even at a modest $25k today, I'm looking at <b id="totalCostInline">$130,256</b> total. That's why I said <b>$100k+</b> in my vision, it's not fear-mongering, it's compounding working <em>against</em> me if I wait. Investing the $50k now is how I fight back.</p>
- </div>
- </div>
- </section>
+  </div>
+  </div>
+  </section>
+</div>
 
- <!-- S4 -->
- <section id="s4" class="section reveal">
- <div class="eyebrow">Slide 4, Investment Allocation Strategy</div>
+<div class="act act-3">
+<div class="act-header">Act 03 <b>Strategy and Growth</b> • How I invest and how it compounds</div>
+  <!-- S4 -->
+  <section id="s4" class="section reveal">
+  <div class="eyebrow">Slide 4, Investment Allocation Strategy</div>
  <h2 class="h2">$50,000, All In on Growth. Here's why.</h2>
  <p class="lead">No savings account. No fixed deposit. I'm 15, I have time, no dependents, and a long horizon. I'm taking smart risks.</p>
  <div class="grid2" style="margin-top:18px">
@@ -468,13 +515,16 @@ nav{
  <div style="font-size:12px; font-weight:800; opacity:.8">WITH MY 70/30 SPLIT</div>
  <div style="font-size:13px; margin-top:6px">📉 Same -40% on equities only = <b style="color:#bbf7d0">−$6,000</b> total (−12%), recoverable in ~1 year at 12%.</div>
  </div>
- </div>
- </div>
- </section>
+  </div>
+  </div>
+  </section>
+</div>
 
- <!-- S8 -->
- <section id="s8" class="section reveal">
- <div class="eyebrow">Slide 8, My 10-Year Wealth Projection</div>
+<div class="act act-4">
+<div class="act-header" style="background:rgba(255,255,255,.92); color:var(--ink); border-color:#e2e8f0">Act 04 <b>Future</b> • What happens in 10 years</div>
+  <!-- S8 -->
+  <section id="s8" class="section reveal">
+  <div class="eyebrow">Slide 8, My 10-Year Wealth Projection</div>
  <h2 class="h2">From $50,000 → <span id="projHead" style="color:var(--emerald)">$155,292</span> in 10 years</h2>
  <p class="lead">Conservative 12% plan (my blended is ~12.9%). Plus I show my tiny $1,000 live portfolio and the $20/month habit, small amounts that teach me to be consistent.</p>
  <div class="grid2" style="margin-top:18px">
@@ -584,18 +634,20 @@ nav{
  <div>💬 <b>"Equity taught me humility."</b>, picking stocks is fun but index/mutual funds usually win for the time spent. I'll keep learning, but my core will stay passive.</div>
  <div>💬 <b>"Inflation check every year."</b>, I'll recalculate real return annually and adjust contributions.</div>
  </div>
- <button class="btn btn-dark" style="width:100%; justify-content:center; margin-top:14px" onclick="window.scrollTo({top:0, behavior:'smooth'})">↑ Back to top, replay the story</button>
- </div>
- </div>
- </section>
+  <button class="btn btn-dark" style="width:100%; justify-content:center; margin-top:14px" onclick="window.scrollTo({top:0, behavior:'smooth'})">↑ Back to top, replay the story</button>
+  </div>
+  </div>
+  </section>
+</div>
 
- <footer style="padding:36px 0 40px; text-align:center; color:var(--muted); font-size:12px">
+  <footer style="padding:36px 0 40px; text-align:center; color:var(--muted); font-size:12px">
  <div style="height:1px; background:var(--border); margin-bottom:16px"></div>
  Fischer's Money Mechanics by Advaiya Bahl - Funding My Future: Building My College and Career Wealth Blueprint<br>
- Hosted at <b style="color:var(--ink)">bchackathon.onrender.com</b> • Built as a living, calculated app • All math runs live in my browser, verified 5× against Fisher, FV/PV, and compounding formulas • © 2026 Advaiya Bahl
+ <span style="opacity:.8">bchackathon.onrender.com • © 2026 Advaiya Bahl</span>
  </footer>
 
 </div>
+<button id="nextFab" class="next-fab">Next →</button>
 
 <script>
 // helpers
@@ -607,14 +659,37 @@ const clamp = (v,a,b)=>Math.max(a,Math.min(b,v));
 // reveal on scroll
 const io = new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('in') }),{threshold:.12});
 document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
-// nav active
+// top progress + rail + nav active
 const sections=[...document.querySelectorAll('section[id]')];
 const navLinks=[...document.querySelectorAll('#navLinks a')];
-window.addEventListener('scroll',()=>{
- let idx=0; sections.forEach((s,i)=>{ if(window.scrollY+120 >= s.offsetTop) idx=i });
- navLinks.forEach(a=>a.classList.remove('active'));
- if(navLinks[idx]) navLinks[idx].classList.add('active');
-});
+const railDots=[...document.querySelectorAll('.rail-dot')];
+const railFill=$('railFill');
+const topProgress=$('topProgress');
+const nextFab=$('nextFab');
+function updateNav(){
+  let idx=0; sections.forEach((s,i)=>{ if(window.scrollY+140 >= s.offsetTop) idx=i });
+  navLinks.forEach(a=>a.classList.remove('active'));
+  if(navLinks[idx]) navLinks[idx].classList.add('active');
+  railDots.forEach((d,i)=> d.classList.toggle('active', i===idx));
+  if(railFill) railFill.style.height = ( (idx)/(sections.length-1)*100 ) + '%';
+  const scrolled = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight))*100;
+  if(topProgress) topProgress.style.width = scrolled + '%';
+  if(nextFab){
+    if(window.scrollY > 600 && idx < sections.length-1){
+      nextFab.classList.add('show');
+      const next = sections[idx+1];
+      const label = next ? next.querySelector('.eyebrow')?.textContent?.replace('Slide','')?.trim() || 'Next' : 'Next';
+      nextFab.textContent = 'Next → ' + label.slice(0,18);
+    } else {
+      nextFab.classList.remove('show');
+    }
+  }
+}
+window.addEventListener('scroll', updateNav, {passive:true});
+window.addEventListener('load', updateNav);
+railDots.forEach(d=> d.addEventListener('click', ()=>{ const t=d.dataset.target; const el=document.getElementById(t); if(el) el.scrollIntoView({behavior:'smooth'}); }));
+if(nextFab) nextFab.addEventListener('click', ()=>{ let idx=0; sections.forEach((s,i)=>{ if(window.scrollY+140 >= s.offsetTop) idx=i }); const nxt = sections[idx+1] || sections[0]; nxt.scrollIntoView({behavior:'smooth'}); });
+updateNav();
 // hero progress anim
 setTimeout(()=>{ const p=$('heroProgress'); if(p) p.style.width='68%'; }, 400);
 
