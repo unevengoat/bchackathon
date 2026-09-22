@@ -1,0 +1,13 @@
+{
+  "name": "bchackathon-fischers-money-mechanics-advaiya-bahl",
+  "version": "1.0.0",
+  "description": "Fischer's Money Mechanics by Advaiya Bahl — Funding My Future: Building My College and Career Wealth Blueprint. Live-calculated wealth plan.",
+  "private": true,
+  "scripts": {
+    "start": "npx serve . -l $PORT",
+    "dev": "npx serve ."
+  },
+  "dependencies": {
+    "serve": "^14.2.0"
+  }
+}
